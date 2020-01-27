@@ -1,6 +1,670 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> HDU - 6704 后缀数组 + 主席树 · 李同学的博客</title><meta name="description" content="HDU - 6704 后缀数组 + 主席树 - John Cena"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="https://milkyknight.github.io/atom.xml" title="李同学的博客"><meta name="generator" content="Hexo 4.2.0"><link rel="alternate" href="/atom.xml" title="李同学的博客" type="application/atom+xml">
-</head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="https://github.com/milkyknight" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">HDU - 6704 后缀数组 + 主席树</h1><div class="post-info">Sep 12, 2019</div><div class="post-content"><p>给一个字符串 s<br>对于每个询问 q(l,r,k) 返回子串 s<del>l-r</del> 第k次出现的位置<br>由于后缀数组按照字典序排序，所以可以主席树维护SA，这样就能找到第k次出现的位置<br>取 l 为左端点的后缀，len = r - l + 1,那么考虑排名左右的后缀中 lcp(i,i+x) &gt;= len,<br>lcp(i,i-x) &gt;= len 的后缀一定存在相同子串，由于后缀数组的性质，可以考虑二分找到 x</p>
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="算法,主席树,后缀数组," />
+
+
+
+
+  
+
+
+  <link rel="alternate" href="/atom.xml" title="李同学的博客" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="给一个字符串 s对于每个询问 q(l,r,k) 返回子串 sl-r 第k次出现的位置由于后缀数组按照字典序排序，所以可以主席树维护SA，这样就能找到第k次出现的位置取 l 为左端点的后缀，len &#x3D; r - l + 1,那么考虑排名左右的后缀中 lcp(i,i+x) &gt;&#x3D; len,lcp(i,i-x) &gt;&#x3D; len 的后缀一定存在相同子串，由于后缀数组的性质，可以考虑二分找到 x">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HDU - 6704 后缀数组 + 主席树">
+<meta property="og:url" content="https://milkyknight.github.io/2019/09/12/HDU-6704-%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84-%E4%B8%BB%E5%B8%AD%E6%A0%91/index.html">
+<meta property="og:site_name" content="李同学的博客">
+<meta property="og:description" content="给一个字符串 s对于每个询问 q(l,r,k) 返回子串 sl-r 第k次出现的位置由于后缀数组按照字典序排序，所以可以主席树维护SA，这样就能找到第k次出现的位置取 l 为左端点的后缀，len &#x3D; r - l + 1,那么考虑排名左右的后缀中 lcp(i,i+x) &gt;&#x3D; len,lcp(i,i-x) &gt;&#x3D; len 的后缀一定存在相同子串，由于后缀数组的性质，可以考虑二分找到 x">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-09-12T12:48:00.000Z">
+<meta property="article:modified_time" content="2020-01-27T11:54:59.521Z">
+<meta property="article:author" content="John Cena">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="主席树">
+<meta property="article:tag" content="后缀数组">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://milkyknight.github.io/2019/09/12/HDU-6704-后缀数组-主席树/"/>
+
+
+
+
+
+  <title>HDU - 6704 后缀数组 + 主席树 | 李同学的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">李同学的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">我在巡司河旁唱歌</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://milkyknight.github.io/2019/09/12/HDU-6704-%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84-%E4%B8%BB%E5%B8%AD%E6%A0%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Cena">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="李同学的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">HDU - 6704 后缀数组 + 主席树</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-12T20:48:00+08:00">
+                2019-09-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>给一个字符串 s<br>对于每个询问 q(l,r,k) 返回子串 s<del>l-r</del> 第k次出现的位置<br>由于后缀数组按照字典序排序，所以可以主席树维护SA，这样就能找到第k次出现的位置<br>取 l 为左端点的后缀，len = r - l + 1,那么考虑排名左右的后缀中 lcp(i,i+x) &gt;= len,<br>lcp(i,i-x) &gt;= len 的后缀一定存在相同子串，由于后缀数组的性质，可以考虑二分找到 x</p>
 <a id="more"></a>
 
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> linf (1ll&lt;&lt;60)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> iinf 0x3f3f3f3f</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> cl(x) memset(x,0,sizeof(x))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> mid ((l+r)&gt;&gt;1)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> lc o&lt;&lt;1</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> rc o&lt;&lt;1|1</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1e6</span> + <span class="number">5</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxk = <span class="number">17</span>;</span><br><span class="line"><span class="keyword">char</span> s[maxn];</span><br><span class="line"><span class="keyword">int</span> r[maxn];</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">SuffixArray</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="comment">// sa[i] 第 i 名 的 起始位置  i -&gt; (1-len)</span></span><br><span class="line">    <span class="comment">// rank[i] 起始位置为 i 的后缀rank i -&gt; ( 0 - len-1)</span></span><br><span class="line">    <span class="comment">// height[i] lcp(sa[i],sa[i-1]) i -&gt; (1 - len)</span></span><br><span class="line">    <span class="keyword">int</span> sa[maxn], rank[maxn], ws[maxn], wv[maxn], wa[maxn], wb[maxn], height[maxn], st[maxk+<span class="number">2</span>][maxn], N;</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(<span class="keyword">int</span> *r, <span class="keyword">int</span> a, <span class="keyword">int</span> b, <span class="keyword">int</span> l)</span></span>&#123;<span class="keyword">return</span> r[a]==r[b] <span class="keyword">and</span> r[a+l]==r[b+l];&#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">clear</span><span class="params">()</span></span>&#123;cl(sa), cl(rank), cl(ws), cl(wv), cl(wa), cl(wb), cl(height);&#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">build</span><span class="params">(<span class="keyword">int</span> *r, <span class="keyword">int</span> n, <span class="keyword">int</span> m)</span></span>&#123;   <span class="comment">// 字符串，字符串长度，基数</span></span><br><span class="line">        N=n;</span><br><span class="line">        n++;</span><br><span class="line">        <span class="keyword">int</span> i, j, k=<span class="number">0</span>, p, *x=wa, *y=wb, *t;</span><br><span class="line">        <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;m;i++)ws[i]=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;n;i++)ws[x[i]=r[i]]++;</span><br><span class="line">        <span class="keyword">for</span>(i=<span class="number">1</span>;i&lt;m;i++)ws[i]+=ws[i<span class="number">-1</span>];</span><br><span class="line">        <span class="keyword">for</span>(i=n<span class="number">-1</span>;i&gt;=<span class="number">0</span>;i--)sa[--ws[x[i]]]=i;</span><br><span class="line">        <span class="keyword">for</span>(p=j=<span class="number">1</span>;p&lt;n;j&lt;&lt;=<span class="number">1</span>,m=p)&#123;</span><br><span class="line">            <span class="keyword">for</span>(p=<span class="number">0</span>,i=n-j;i&lt;n;i++)y[p++]=i;</span><br><span class="line">            <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;n;i++)<span class="keyword">if</span>(sa[i]&gt;=j)y[p++]=sa[i]-j;</span><br><span class="line">            <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;n;i++)wv[i]=x[y[i]];</span><br><span class="line">            <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;m;i++)ws[i]=<span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;n;i++)ws[wv[i]]++;</span><br><span class="line">            <span class="keyword">for</span>(i=<span class="number">1</span>;i&lt;m;i++)ws[i]+=ws[i<span class="number">-1</span>];</span><br><span class="line">            <span class="keyword">for</span>(i=n<span class="number">-1</span>;i&gt;=<span class="number">0</span>;i--)sa[--ws[wv[i]]]=y[i];</span><br><span class="line">            <span class="keyword">for</span>(t=x,x=y,y=t,p=<span class="number">1</span>,i=<span class="number">1</span>,x[sa[<span class="number">0</span>]]=<span class="number">0</span>;i&lt;n;i++)</span><br><span class="line">                x[sa[i]]=cmp(y,sa[i<span class="number">-1</span>],sa[i],j)?p<span class="number">-1</span>:p++;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;n;i++)rank[sa[i]]=i;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;n<span class="number">-1</span>;height[rank[i++]]=k)</span><br><span class="line">            <span class="keyword">for</span>(k?k--:<span class="number">0</span>,j=sa[rank[i]<span class="number">-1</span>];r[i+k]==r[j+k];k++);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">build_st</span><span class="params">()</span>     <span class="comment">//st表</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i, k;</span><br><span class="line">        <span class="keyword">for</span>(i=<span class="number">1</span>;i&lt;=N;i++)st[<span class="number">0</span>][i]=height[i];</span><br><span class="line">        <span class="keyword">for</span>(k=<span class="number">1</span>;k&lt;=maxk;k++)</span><br><span class="line">            <span class="keyword">for</span>(i=<span class="number">1</span>;i+(<span class="number">1</span>&lt;&lt;k)<span class="number">-1</span>&lt;=N;i++)</span><br><span class="line">                st[k][i]=min(st[k<span class="number">-1</span>][i],st[k<span class="number">-1</span>][i+(<span class="number">1</span>&lt;&lt;k<span class="number">-1</span>)]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">lcp</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span>   <span class="comment">//最长公共前缀</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> l=rank[x], r=rank[y];</span><br><span class="line">        <span class="keyword">if</span>(l&gt;r)swap(l,r);</span><br><span class="line">        <span class="keyword">if</span>(l==r)<span class="keyword">return</span> N-sa[l];</span><br><span class="line">        <span class="keyword">int</span> t=log2(r-l);</span><br><span class="line">        <span class="keyword">return</span> min(st[t][l+<span class="number">1</span>],st[t][r-(<span class="number">1</span>&lt;&lt;t)+<span class="number">1</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;SA;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">segment_tree</span>&#123;</span></span><br><span class="line">    <span class="keyword">int</span> root[maxn],cnt = <span class="number">0</span>;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">node</span>&#123;</span><span class="keyword">int</span> l,r,num;&#125;e[maxn*<span class="number">40</span>];</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">clear</span><span class="params">()</span></span>&#123;cl(root);cnt = <span class="number">0</span>;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">update</span><span class="params">(<span class="keyword">int</span> &amp;x,<span class="keyword">int</span> y,<span class="keyword">int</span> l,<span class="keyword">int</span> r,<span class="keyword">int</span> pos)</span></span>&#123;</span><br><span class="line">        x = ++cnt;</span><br><span class="line">        e[x] = e[y];</span><br><span class="line">        e[x].num++;</span><br><span class="line">        <span class="keyword">if</span>(l == r) <span class="keyword">return</span> ;</span><br><span class="line">        <span class="keyword">if</span>(pos&lt;=mid) update(e[x].l,e[y].l,l,mid,pos);</span><br><span class="line">        <span class="keyword">else</span> update(e[x].r,e[y].r,mid+<span class="number">1</span>,r,pos);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">query</span><span class="params">(<span class="keyword">int</span> x,<span class="keyword">int</span> y,<span class="keyword">int</span> l,<span class="keyword">int</span> r,<span class="keyword">int</span> k)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(l == r) <span class="keyword">return</span> l;</span><br><span class="line">        <span class="keyword">int</span> ls = e[e[x].l].num - e[e[y].l].num;</span><br><span class="line">        <span class="keyword">if</span>(k&lt;=ls) <span class="keyword">return</span> query(e[x].l,e[y].l,l,mid,k);</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">return</span> query(e[x].r,e[y].r,mid+<span class="number">1</span>,r,k-ls);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;seg;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> t,q,len;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">"%d"</span>,&amp;t);</span><br><span class="line">    <span class="keyword">while</span>(t--)&#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">"%d %d"</span>,&amp;len,&amp;q);</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">"%s"</span>,s);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;len;i++) r[i] = s[i];</span><br><span class="line">        r[len] = <span class="number">0</span>;</span><br><span class="line">        SA.clear();</span><br><span class="line">        SA.build(r,len,<span class="number">300</span>);</span><br><span class="line">        SA.build_st();</span><br><span class="line">        seg.clear();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=len;i++) seg.update(seg.root[i],seg.root[i<span class="number">-1</span>],<span class="number">1</span>,len,SA.sa[i]+<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">while</span>(q--)&#123;</span><br><span class="line">            <span class="keyword">int</span> l,r,k;</span><br><span class="line">            <span class="built_in">scanf</span>(<span class="string">"%d %d %d"</span>,&amp;l,&amp;r,&amp;k);</span><br><span class="line">            <span class="keyword">int</span> sublen = r - l + <span class="number">1</span>;</span><br><span class="line">            l--;</span><br><span class="line">            <span class="keyword">int</span> ql = SA.rank[l],qr = SA.rank[l];</span><br><span class="line">            <span class="keyword">int</span> nl = <span class="number">1</span>, nr = SA.rank[l];</span><br><span class="line">            <span class="keyword">while</span>(nl &lt;= nr)&#123;</span><br><span class="line">                <span class="keyword">int</span> nmid = (nl + nr)&gt;&gt;<span class="number">1</span>;</span><br><span class="line">                <span class="keyword">if</span>(SA.lcp(SA.sa[nmid],l) &gt;= sublen)&#123;</span><br><span class="line">                    ql = nmid;</span><br><span class="line">                    nr =  nmid - <span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                    nl = nmid + <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            nl = SA.rank[l]; nr = len;</span><br><span class="line">            <span class="keyword">while</span>(nl &lt;= nr)&#123;</span><br><span class="line">                <span class="keyword">int</span> nmid = (nl + nr)&gt;&gt;<span class="number">1</span>;</span><br><span class="line">                <span class="keyword">if</span>(SA.lcp(SA.sa[nmid],l) &gt;= sublen)&#123;</span><br><span class="line">                    qr = nmid;</span><br><span class="line">                    nl = nmid + <span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                    nr = nmid - <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//cout &lt;&lt; SA.rank[l] &lt;&lt; " " &lt;&lt; ql &lt;&lt; " " &lt;&lt; qr &lt;&lt; endl;</span></span><br><span class="line">            <span class="keyword">if</span>(qr-ql+<span class="number">1</span>&lt;k) <span class="built_in">printf</span>(<span class="string">"-1\n"</span>);</span><br><span class="line">            <span class="keyword">else</span> <span class="built_in">printf</span>(<span class="string">"%d\n"</span>,seg.query(seg.root[qr],seg.root[ql<span class="number">-1</span>],<span class="number">1</span>,len,k));</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</div></article></div></main><footer><div class="paginator"><a href="/2019/09/12/HDU-6695-%E4%BA%8C%E5%88%86%E6%9C%80%E8%BF%91/" class="prev">PREV</a><a href="/2019/09/01/HDU-6703-array/" class="next">NEXT</a></div><div class="copyright"><p>© 2015 - 2020 <a href="https://milkyknight.github.io">John Cena</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"># 算法</a>
+          
+            <a href="/tags/%E4%B8%BB%E5%B8%AD%E6%A0%91/" rel="tag"># 主席树</a>
+          
+            <a href="/tags/%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84/" rel="tag"># 后缀数组</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/01/HDU-6703-array/" rel="next" title="HDU-6703 array">
+                <i class="fa fa-chevron-left"></i> HDU-6703 array
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/12/HDU-6695-%E4%BA%8C%E5%88%86%E6%9C%80%E8%BF%91/" rel="prev" title="HDU 6695 二分最近">
+                HDU 6695 二分最近 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Cena</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Cena</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
