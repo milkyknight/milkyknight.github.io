@@ -64,7 +64,7 @@
 <p>pwd 是 <strong>Print Working Directory</strong> 的缩写，也就是显示目前所在目录的命令。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@kuangshen kuangstudy]<span class="comment">#pwd [-P]</span></span><br></pre></td></tr></table></figure>
 
-<p>选项与参数：<strong>-P</strong> ：显示出确实的路径，而非使用连接(link) 路径。</p>
+<p>选项与参数：**-P** ：显示出确实的路径，而非使用连接(link) 路径。</p>
 <p>测试：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 单纯显示出目前的工作目录</span></span><br><span class="line">[root@kuangshen ~]<span class="comment"># pwd</span></span><br><span class="line">/root</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果是链接，要显示真实地址，可以使用 -P参数</span></span><br><span class="line">[root@kuangshen /]<span class="comment"># cd bin</span></span><br><span class="line">[root@kuangshen bin]<span class="comment"># pwd -P</span></span><br><span class="line">/usr/bin</span><br></pre></td></tr></table></figure>
 
@@ -88,7 +88,7 @@
 <p>语法：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rmdir [-p] 目录名称</span><br></pre></td></tr></table></figure>
 
-<p>选项与参数：<strong>-p ：</strong>连同上一级『空的』目录也一起删除</p>
+<p>选项与参数：**-p ：**连同上一级『空的』目录也一起删除</p>
 <p>测试：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 看看有多少目录存在？</span></span><br><span class="line">[root@kuangshen home]<span class="comment"># ls -l</span></span><br><span class="line">drwxr-xr-x 2 root root  4096 Mar 12 21:55 <span class="built_in">test</span></span><br><span class="line">drwxr-xr-x 3 root root  4096 Mar 12 21:56 test1</span><br><span class="line">drwx--x--x 2 root root  4096 Mar 12 21:58 test2</span><br><span class="line"></span><br><span class="line"><span class="comment"># 可直接删除掉，没问题</span></span><br><span class="line">[root@kuangshen home]<span class="comment"># rmdir test</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 因为尚有内容，所以无法删除！</span></span><br><span class="line">[root@kuangshen home]<span class="comment"># rmdir test1</span></span><br><span class="line">rmdir: failed to remove ‘test1’: Directory not empty</span><br><span class="line"></span><br><span class="line"><span class="comment"># 利用 -p 这个选项，立刻就可以将 test1/test2/test3/test4 依次删除。</span></span><br><span class="line">[root@kuangshen home]<span class="comment"># rmdir -p test1/test2/test3/test4</span></span><br></pre></td></tr></table></figure>
 
@@ -127,7 +127,7 @@
 <li>-r ：递归删除啊！最常用在目录的删除了！这是非常危险的选项！！！</li>
 </ul>
 <p>测试：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 将刚刚在 cp 的实例中创建的 install.sh删除掉！</span><br><span class="line">[root@kuangshen home]# rm -i install.sh</span><br><span class="line">rm: remove regular file ‘install.sh’? y</span><br><span class="line"># 如果加上 -i 的选项就会主动询问喔，避免你删除到错误的档名！</span><br><span class="line"></span><br><span class="line"># 尽量不要在服务器上使用 rm -rf &#x2F;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 将刚刚在 cp 的实例中创建的 install.sh删除掉！</span><br><span class="line">[root@kuangshen home]# rm -i install.sh</span><br><span class="line">rm: remove regular file ‘install.sh’? y</span><br><span class="line"># 如果加上 -i 的选项就会主动询问喔，避免你删除到错误的档名！</span><br><span class="line"></span><br><span class="line"># 尽量不要在服务器上使用 rm -rf /</span><br></pre></td></tr></table></figure>
 
 <blockquote>
 <p>mv  ( 移动文件与目录，或修改名称 )</p>
@@ -212,7 +212,7 @@
 <li>head 只看头几行</li>
 <li>tail 只看尾巴几行</li>
 </ul>
-<p>你可以使用 <em>man [命令]</em>来查看各个命令的使用文档，如 ：man cp。</p>
+<p>你可以使用 *man [命令]*来查看各个命令的使用文档，如 ：man cp。</p>
 <blockquote>
 <p>cat 由第一行开始显示文件内容</p>
 </blockquote>
@@ -296,7 +296,7 @@
 <p>语法：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">head [-n number] 文件</span><br></pre></td></tr></table></figure>
 
-<p>选项与参数：<strong>-n</strong> 后面接数字，代表显示几行的意思！</p>
+<p>选项与参数：**-n** 后面接数字，代表显示几行的意思！</p>
 <p>默认的情况中，显示前面 10 行！若要显示前 20 行，就得要这样：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@kuangshen etc]<span class="comment"># head -n 20 /etc/csh.login</span></span><br></pre></td></tr></table></figure>
 
@@ -331,7 +331,7 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@kuangshen /]<span class="comment"># cd /home</span></span><br><span class="line">[root@kuangshen home]<span class="comment"># touch f1 # 创建一个测试文件f1</span></span><br><span class="line">[root@kuangshen home]<span class="comment"># ls</span></span><br><span class="line">f1</span><br><span class="line">[root@kuangshen home]<span class="comment"># ln f1 f2     # 创建f1的一个硬连接文件f2</span></span><br><span class="line">[root@kuangshen home]<span class="comment"># ln -s f1 f3   # 创建f1的一个符号连接文件f3</span></span><br><span class="line">[root@kuangshen home]<span class="comment"># ls -li       # -i参数显示文件的inode节点信息</span></span><br><span class="line">397247 -rw-r--r-- 2 root root     0 Mar 13 00:50 f1</span><br><span class="line">397247 -rw-r--r-- 2 root root     0 Mar 13 00:50 f2</span><br><span class="line">397248 lrwxrwxrwx 1 root root     2 Mar 13 00:50 f3 -&gt; f1</span><br></pre></td></tr></table></figure>
 
 <p>从上面的结果中可以看出，硬连接文件 f2 与原文件 f1 的 inode 节点相同，均为 397247，然而符号连接文件的 inode 节点不同。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># echo 字符串输出 &gt;&gt; f1 输出到 f1文件</span></span><br><span class="line">[root@kuangshen home]<span class="comment"># echo "I am f1 file" &gt;&gt;f1</span></span><br><span class="line">[root@kuangshen home]<span class="comment"># cat f1</span></span><br><span class="line">I am f1 file</span><br><span class="line">[root@kuangshen home]<span class="comment"># cat f2</span></span><br><span class="line">I am f1 file</span><br><span class="line">[root@kuangshen home]<span class="comment"># cat f3</span></span><br><span class="line">I am f1 file</span><br><span class="line">[root@kuangshen home]<span class="comment"># rm -f f1</span></span><br><span class="line">[root@kuangshen home]<span class="comment"># cat f2</span></span><br><span class="line">I am f1 file</span><br><span class="line">[root@kuangshen home]<span class="comment"># cat f3</span></span><br><span class="line">cat: f3: No such file or directory</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># echo 字符串输出 &gt;&gt; f1 输出到 f1文件</span></span><br><span class="line">[root@kuangshen home]<span class="comment"># echo &quot;I am f1 file&quot; &gt;&gt;f1</span></span><br><span class="line">[root@kuangshen home]<span class="comment"># cat f1</span></span><br><span class="line">I am f1 file</span><br><span class="line">[root@kuangshen home]<span class="comment"># cat f2</span></span><br><span class="line">I am f1 file</span><br><span class="line">[root@kuangshen home]<span class="comment"># cat f3</span></span><br><span class="line">I am f1 file</span><br><span class="line">[root@kuangshen home]<span class="comment"># rm -f f1</span></span><br><span class="line">[root@kuangshen home]<span class="comment"># cat f2</span></span><br><span class="line">I am f1 file</span><br><span class="line">[root@kuangshen home]<span class="comment"># cat f3</span></span><br><span class="line">cat: f3: No such file or directory</span><br></pre></td></tr></table></figure>
 
 <p>通过上面的测试可以看出：当删除原始文件 f1 后，硬连接 f2 不受影响，但是符号连接 f1 文件无效；</p>
 <p>依此您可以做一些相关的测试，可以得到以下全部结论：</p>
