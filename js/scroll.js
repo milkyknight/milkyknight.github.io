@@ -54,13 +54,13 @@ $(function () {
 
   // head scroll
   $('#post-content').find('h1,h2,h3,h4,h5,h6').on('click', function (e) {
-    scrollToHead('#' + $(this).attr('id'))
+    scrollToHead('#' + decodeURI($(this).attr('id')))
   })
 
   // head scroll
   $('.toc-link').on('click', function (e) {
     e.preventDefault()
-    scrollToHead($(this).attr('href'))
+    scrollToHead(decodeURI($(this).attr('href')))
   })
 
   // find the scroll direction
